@@ -1,0 +1,47 @@
+a {
+    color: black;
+    text-decoration: none; /*text에 부여된 장식을 없앰 => 밑줄 제거*/
+}
+.saw{
+    color: gray;
+}
+#active{
+    color:red;
+}
+h1 {
+    font-size: 50px;
+    text-align: center;
+    border-bottom: 1px solid gray;
+    margin: 0;
+    padding: 20px;
+}
+#grid ol {
+    width: 100px;
+    border-right: 1px solid gray;
+    margin: 0px;
+    padding: 20px;
+    padding-left: 30px;
+}
+#grid{
+    display: grid;
+    grid-template-columns: 150px 1fr;
+}
+#grid #article{
+    padding: 30px;
+    padding-top: 0px;
+}
+body{
+    margin: 0px;
+}
+@media(max-width:800px){
+    #grid{
+        display: block;
+    }
+    #grid ol{
+        border-right: none;
+    }
+}
+img {
+    display: block;
+    padding:20px;
+}
