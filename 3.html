@@ -15,14 +15,15 @@
             </ol>
             <div id="article">
                 <input id="daynight" type="button" value="night" onclick="
-                    if(document.querySelector('#daynight').value=='day'){
-                        document.querySelector('body').style.backgroundColor='white';
-                        document.querySelector('body').style.color='black';
-                        document.querySelector('#daynight').value='night';
+                    var target=document.querySelector('body');
+                    if(this.value=='day'){
+                        target.style.backgroundColor='white';
+                        target.style.color='black';
+                        this.value='night';
                     } else{
-                        document.querySelector('body').style.backgroundColor='black';
-                        document.querySelector('body').style.color='white';
-                        document.querySelector('#daynight').value='day';
+                        target.style.backgroundColor='black';
+                        target.style.color='white';
+                        this.value='day';
                     }
                 ">
                 <h2>JavaScript</h2>
