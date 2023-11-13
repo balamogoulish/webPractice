@@ -16,15 +16,22 @@
             <div id="article">
                 <input id="daynight" type="button" value="night" onclick="
                     var target=document.querySelector('body');
+                    var alist=document.querySelectorAll('a');
                     if(this.value=='day'){
                         target.style.backgroundColor='white';
                         target.style.color='black';
                         this.value='night';
+                        for(i=0; i<alist.length; i++){
+                            alist[i].style.color='black'
+                        }
                     } else{
                         target.style.backgroundColor='black';
                         target.style.color='white';
                         this.value='day';
-                    }
+                        for(i=0; i<alist.length; i++){
+                            alist[i].style.color='lightblue'
+                        }
+                    }                   
                 ">
                 <h2>JavaScript</h2>
                 <p>
