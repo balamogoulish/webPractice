@@ -15,7 +15,6 @@ var Body = {
     }
 }
 function dayNightHandler(self) {
-    var target=document.querySelector('body');
     if(self.value=='day'){
         Body.setColor('black');
         Body.setBackgroundColor('white');
