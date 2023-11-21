@@ -57,7 +57,6 @@ var app = http.createServer(function(request, response) {
                     response.end(template); 
                 });
             })
-            
         } 
     } else if(pathName === '/create'){
         fs.readdir('./data', function(err, filelist){     
@@ -92,6 +91,28 @@ var app = http.createServer(function(request, response) {
                 response.end();              
             })
         });
+    } else if(pathName === '/update'){
+        fs.readdir('./data', function(err, filelist){
+            fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){   
+                var title = queryData.id;
+                var list = templateList(filelist);
+                var body = `
+                <form action="/update_process" method="post">
+                    <input type="hidden" name="id" value="${title}">
+                    <p><input type="text" name="title" placeholder="title" value="${title}"></p>
+                    <p>
+                        <textarea name="description" placeholder="description" value="${description}"></textarea>
+                    </p>
+                    <p>
+                        <input type="submit">
+                    </p>
+                </form>
+            `;  
+                var template = templateHTML(title, list, body,'');       
+                response.writeHead(200); 
+                response.end(template); 
+            });
+        })
     } else{
         response.writeHead(404); //writeHead(404): 에러
         response.end('Not Found');
