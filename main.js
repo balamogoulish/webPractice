@@ -3,6 +3,7 @@ var fs = require('fs');
 var url = require('url');
 var qs = require('querystring');
 var template = require('./lib/template.js');
+var path = require('path');
 
 var app = http.createServer(function(request, response) {
     var _url = request.url;
@@ -21,7 +22,8 @@ var app = http.createServer(function(request, response) {
             })
         } else{
             fs.readdir('./data', function(err, filelist){
-                fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){   
+                var fileteredId = path.parse(queryData.id).base;
+                fs.readFile(`data/${fileteredId}`, 'utf8', function(err, description){   
                     var title = queryData.id;
                     var list = template.list(filelist);  
                     var html = template.html(title, list, description,
@@ -72,7 +74,8 @@ var app = http.createServer(function(request, response) {
         });
     } else if(pathName === '/update'){
         fs.readdir('./data', function(err, filelist){
-            fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){   
+            var fileteredId = path.parse(queryData.id).base;
+            fs.readFile(`data/${fileteredId}`, 'utf8', function(err, description){   
                 var title = queryData.id;
                 var list = template.list(filelist);
                 var body = `
@@ -118,7 +121,8 @@ var app = http.createServer(function(request, response) {
         request.on('end', function(){ //정보 수신이 끝났을 때
             var post = qs.parse(body);
             var id = post.id;
-            fs.unlink(`data/${id}`, function(err){
+            var fileteredId = path.parse(id).base;
+            fs.unlink(`data/${fileteredId}`, function(err){
                 response.writeHead(302, {Location:`/`});
                 response.end();   
             })
