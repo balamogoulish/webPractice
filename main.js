@@ -84,10 +84,13 @@ var app = http.createServer(function(request, response) {
         });
         request.on('end', function(){ //정보 수신이 끝났을 때
             var post = qs.parse(body);
-            console.log(post);
+            var newtitle = post.title;
+            var newdescription = post.description;
+            fs.writeFile(`data/${newtitle}`, newdescription, 'utf8', function(err){
+                response.writeHead(302, {Location:`/?id=${newtitle}`}); //파일 생성 후 생성된 파일로 redirection
+                response.end();              
+            })
         });
-        response.writeHead(200);
-        response.end("success"); 
     } else{
         response.writeHead(404); //writeHead(404): 에러
         response.end('Not Found');
