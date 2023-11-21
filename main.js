@@ -137,6 +137,19 @@ var app = http.createServer(function(request, response) {
             })
             
         });
+    } else if(pathName ==='/delete_process'){
+        var body ='';
+        request.on('data', function(data){ //data가 들어올 때마다 function(data) 실행
+            body += data; 
+        });
+        request.on('end', function(){ //정보 수신이 끝났을 때
+            var post = qs.parse(body);
+            var id = post.id;
+            fs.unlink(`data/${id}`, function(err){
+                response.writeHead(302, {Location:`/`});
+                response.end();   
+            })
+        });
     } else{
         response.writeHead(404); //writeHead(404): 에러
         response.end('Not Found');
