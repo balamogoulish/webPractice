@@ -52,7 +52,13 @@ var app = http.createServer(function(request, response) {
                     var title = queryData.id;
                     var list = templateList(filelist);  
                     var template = templateHTML(title, list, description,
-                        `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`);       
+                       `<a href="/create">create</a> 
+                        <a href="/update?id=${title}">update</a>
+                        <form action="delete_process" method="post">
+                            <input type="hidden" name="id" value="${title}">
+                            <input type="submit" value="delete">
+                        </form>
+                    `);       
                     response.writeHead(200); 
                     response.end(template); 
                 });
@@ -101,7 +107,7 @@ var app = http.createServer(function(request, response) {
                     <input type="hidden" name="id" value="${title}">
                     <p><input type="text" name="title" placeholder="title" value="${title}"></p>
                     <p>
-                        <textarea name="description" placeholder="description" value="${description}"></textarea>
+                        <textarea name="description" placeholder="description">${description}</textarea>
                     </p>
                     <p>
                         <input type="submit">
@@ -113,6 +119,24 @@ var app = http.createServer(function(request, response) {
                 response.end(template); 
             });
         })
+    } else if(pathName ==='/update_process'){
+        var body ='';
+        request.on('data', function(data){ //data가 들어올 때마다 function(data) 실행
+            body += data; 
+        });
+        request.on('end', function(){ //정보 수신이 끝났을 때
+            var post = qs.parse(body);
+            var id = post.id;
+            var newtitle = post.title;
+            var newdescription = post.description;
+            fs.rename(`data/${id}`, `data/${newtitle}`, function(err){
+                    fs.writeFile(`data/${newtitle}`, newdescription, 'utf8', function(err){
+                    response.writeHead(302, {Location:`/?id=${newtitle}`}); //파일 생성 후 생성된 파일로 redirection
+                    response.end();              
+                })
+            })
+            
+        });
     } else{
         response.writeHead(404); //writeHead(404): 에러
         response.end('Not Found');
