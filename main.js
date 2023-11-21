@@ -1,6 +1,7 @@
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
+var qs = require('querystring');
 
 function templateHTML(title, list, description){
     return `
@@ -13,6 +14,7 @@ function templateHTML(title, list, description){
         <body>
         <h1><a href="/">WEB</a></h1>
         ${list}
+        <a href="/create">create</a>
         <h2>${title}</h2>
         <p>${description}</p>
         </body>
@@ -56,6 +58,36 @@ var app = http.createServer(function(request, response) {
             })
             
         } 
+    } else if(pathName === '/create'){
+        fs.readdir('./data', function(err, filelist){     
+            var title = 'WEB - create';
+            var description = `
+                <form action="http://localhost:3000/create_process" method="post">
+                    <p><input type="text" name="title" placeholder="title"></p>
+                    <p>
+                        <textarea name="description" placeholder="description"></textarea>
+                    </p>
+                    <p>
+                        <input type="submit">
+                    </p>
+                </form>
+            `;
+            var list = templateList(filelist);
+            var template = templateHTML(title, list, description);     
+            response.writeHead(200);
+            response.end(template);                 
+        })
+    } else if(pathName === '/create_process'){ //post를 받음
+        var body ='';
+        request.on('data', function(data){ //data가 들어올 때마다 function(data) 실행
+            body += data; 
+        });
+        request.on('end', function(){ //정보 수신이 끝났을 때
+            var post = qs.parse(body);
+            console.log(post);
+        });
+        response.writeHead(200);
+        response.end("success"); 
     } else{
         response.writeHead(404); //writeHead(404): 에러
         response.end('Not Found');
